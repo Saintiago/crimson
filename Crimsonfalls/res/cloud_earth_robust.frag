@@ -21,8 +21,6 @@ const float SHININESS = 10.0;
 
 uniform LightSource light0;
 uniform sampler2D colormap;
-uniform sampler2D surfaceDataMap;
-uniform sampler2D nightColormap;
 uniform mat4 view;
 
 in vec2 fragTextureUV;
@@ -57,21 +55,8 @@ void main()
 
     // Get base color by fetching the texture
     vec4 color = texture2D(colormap, fragTextureUV.st);
-    // Get night earth color by fetching the texture
-    vec4 nightColor = texture2D(nightColormap, fragTextureUV.st);
-    // Extract surface data where each channel has own meaning
-    vec4 surfaceData = texture2D(surfaceDataMap, fragTextureUV.st);
-    // Red channel keeps cloud luminance
-    float cloudGray = surfaceData.r;
-    // Green channel keeps 1 for water and 0 for earth.
-    float waterFactor = surfaceData.g;
-
-    vec4 diffuseColor = mix(color, vec4(factors.diffuse), cloudGray);
-    vec4 diffuseIntensity = mix(nightColor, diffuseColor,vec4(factors.diffuse))
-            * light0.diffuse;
-
-    vec4 specularIntensity = waterFactor * factors.specular
-            * light0.specular;
+    vec4 diffuseIntensity = color * light0.diffuse;
+    vec4 specularIntensity = factors.specular * light0.specular;
 
     gl_FragColor = diffuseIntensity + specularIntensity;
 }

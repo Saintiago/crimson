@@ -14,7 +14,7 @@ public:
     virtual void OnDrawWindow() = 0;
 
     virtual void OnDragBegin(const glm::vec2 &pos) { (void)pos; }
-    virtual void OnDragMotion(const glm::vec2 &pos) { (void)pos; }
+	virtual void OnMouseMotion(const glm::vec2 &pos) { (void)pos; }
     virtual void OnDragEnd(const glm::vec2 &pos) { (void)pos; }
     virtual void OnKeyDown(const SDL_KeyboardEvent &) {}
     virtual void OnKeyUp(const SDL_KeyboardEvent &) {}

@@ -2,13 +2,13 @@
 #include "libchapter3.h"
 #include "IRenderer3D.h"
 
-class CEarthProgramContext;
+class CProgramContext;
 
-class CEarthRenderer3D : public IRenderer3D
+class CRenderer3D : public IRenderer3D
 {
 public:
-    CEarthRenderer3D(CEarthProgramContext &context);
-    ~CEarthRenderer3D();
+	CRenderer3D(CProgramContext &context);
+    ~CRenderer3D();
 
     // IRenderer3D interface
     void SetTexCoord2DOffset(size_t offset, size_t stride) override;
@@ -16,7 +16,7 @@ public:
     void SetNormalOffset(size_t offset, size_t stride) override;
 
 private:
-    CEarthProgramContext &m_context;
+	CProgramContext &m_context;
     CVertexAttribute m_vertexAttr;
     CVertexAttribute m_normalAttr;
     CVertexAttribute m_texCoordAttr;

@@ -5,14 +5,21 @@
 #include <glm/fwd.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
-#include "MeshP3NT2.h"
+#include "Unit.h"
 
-class CArena
+const float ARENA_SIZE = 8.0f;
+
+class CArena : public CUnit
 {
 public:
-	CArena(unsigned slices, unsigned stacks);
-    void Draw(IRenderer3D &renderer)const;
+
+	glm::vec2 GetEntryPoint();
+	CArena(int textureSlot);
+	void Update(float dt) override;
+	glm::mat4 GetModel() override;
+	SMeshDataP3NT2 GetTesselator() override;
+	glm::vec2 GetSize();
 
 private:
-    CMeshP3NT2 m_mesh;
+	glm::vec2 m_size = { ARENA_SIZE, ARENA_SIZE };
 };

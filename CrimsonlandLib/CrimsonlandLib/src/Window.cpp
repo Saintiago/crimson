@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "libchapter3_private.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_syswm.h>
 
 namespace
 {
@@ -33,7 +34,7 @@ void DispatchEvent(const SDL_Event &event, IWindowClient &acceptor)
         acceptor.OnDragEnd(GetMousePosition(event.button));
         break;
     case SDL_MOUSEMOTION:
-        acceptor.OnDragMotion(GetMousePosition(event.motion));
+        acceptor.OnMouseMotion(GetMousePosition(event.motion));
         break;
     }
 }
@@ -136,6 +137,18 @@ public:
     {
     }
 
+	void ContainMouse()
+	{
+		SDL_VERSION(&m_wmInfo.version);
+		SDL_bool result = SDL_GetWindowWMInfo(m_pWindow.get(), &m_wmInfo);
+		assert(result == SDL_TRUE);
+		RECT r;
+		HWND windowHandle = m_wmInfo.info.win.window;
+		assert(::IsWindow(windowHandle));
+		GetWindowRect(windowHandle, &r);
+		ClipCursor(&r);
+	}
+
     void Show(const std::string &title, const glm::ivec2 &size)
     {
 		m_size = size;
@@ -212,6 +225,7 @@ public:
 			CUtils::ValidateOpenGLErrors();
 			SwapBuffers();
 			chronometer.WaitNextFrameTime(FRAME_PERIOD);
+			ContainMouse();
         }
     }
 
@@ -268,6 +282,7 @@ private:
     SDLGLContextPtr m_pGLContext;
     glm::ivec2 m_size;
     glm::vec4 m_clearColor;
+	SDL_SysWMinfo m_wmInfo;
 };
 
 CWindow::CWindow(ContextProfile profile, ContextMode mode)

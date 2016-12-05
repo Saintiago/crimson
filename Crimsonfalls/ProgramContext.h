@@ -1,7 +1,8 @@
 #pragma once
 #include "libchapter3.h"
+#include <string>
 
-class CEarthProgramContext
+class CProgramContext
 {
 public:
     struct SLightSource
@@ -11,7 +12,7 @@ public:
         glm::vec4 specular;
     };
 
-    CEarthProgramContext();
+	CProgramContext();
 
     void Use();
     CVertexAttribute GetPositionAttr()const;
@@ -27,6 +28,8 @@ public:
     void SetView(const glm::mat4 &value);
     void SetProjection(const glm::mat4 &value);
     void SetLight0(const SLightSource &source);
+	int LoadTexture(const std::string texturePath);
+	void SwitchShaderTextureSlot(int slot);
 
 private:
     glm::mat4 m_model;
@@ -35,8 +38,10 @@ private:
     glm::mat4 m_normalModelView;
     SLightSource m_light0;
 
-    CTexture2DUniquePtr m_pEarthTexture;
-    CTexture2DUniquePtr m_pCloudTexture;
-    CTexture2DUniquePtr m_pNightTexture;
-    CShaderProgram m_programEarth;
+    CShaderProgram m_program;
+	CTexture2DLoader m_loader;
+	int m_currentTextureSlot = 1;
+	std::vector<CTexture2DUniquePtr> m_textures;
+
+	void SwitchGlTextureSlot(int slot);
 };

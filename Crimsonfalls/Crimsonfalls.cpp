@@ -6,8 +6,9 @@ int main(int, char *[])
 {
     try
     {
+		srand(static_cast<unsigned>(time(NULL)));
         CWindow window(ContextProfile::RobustOpenGL_3_2, ContextMode::Debug);
-        window.Show("Demo #17: Planet Earth (OpenGL 3.2+ Core Profile)", {800, 600});
+        window.Show("Crimsonland", {800, 600});
         CWindowClient client(window);
         window.DoMainLoop();
     }

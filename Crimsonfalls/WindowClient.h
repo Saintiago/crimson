@@ -1,7 +1,9 @@
 #pragma once
 #include "libchapter3.h"
-#include "IdentitySphere.h"
-#include "EarthProgramContext.h"
+#include "Arena.h"
+#include "Player.h"
+#include "EnemySystem.h"
+#include "ProgramContext.h"
 #include <vector>
 
 class CWindowClient
@@ -16,19 +18,23 @@ protected:
     void OnDrawWindow() override;
     void OnKeyDown(const SDL_KeyboardEvent &) override;
     void OnKeyUp(const SDL_KeyboardEvent &) override;
+	void OnMouseMotion(const glm::vec2 &pos) override;
 
 private:
-    void UpdateRotation(float deltaSeconds);
     void SetupView(const glm::ivec2 &size);
     void SetupLight0();
+	bool CheckPlayerEnemiesCollisions();
 
     // Данный VAO будет объектом по-умолчанию.
     // Его привязка должна произойти до первой привязки VBO.
     //  http://stackoverflow.com/questions/13403807/
     CArrayObject m_defaultVAO;
 
-    CIdentitySphere m_sphereObj;
+    CArena m_arena;
+	CPlayer m_player;
+	CEnemySystem m_enemies;
     CCamera m_camera;
     CDirectedLightSource m_sunlight;
-    CEarthProgramContext m_programContext;
+    CProgramContext m_programContext;
+	float m_timeToSpawnEnemy = 0;
 };

@@ -152,27 +152,37 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EarthProgramContext.h" />
-    <ClInclude Include="EarthRenderer3D.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemySystem.h" />
+    <ClInclude Include="Renderer3D.h" />
     <ClInclude Include="Arena.h" />
     <ClInclude Include="IRenderer3D.h" />
     <ClInclude Include="MeshP3NT2.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="ProgramContext.h" />
+    <ClInclude Include="Ray.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Unit.h" />
     <ClInclude Include="WindowClient.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Crimsonfalls.cpp" />
-    <ClCompile Include="EarthProgramContext.cpp" />
-    <ClCompile Include="EarthRenderer3D.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemySystem.cpp" />
+    <ClCompile Include="Renderer3D.cpp" />
     <ClCompile Include="Arena.cpp" />
     <ClCompile Include="MeshP3NT2.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ProgramContext.cpp" />
+    <ClCompile Include="Ray.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Unit.cpp" />
     <ClCompile Include="WindowClient.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
