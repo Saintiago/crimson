@@ -92,7 +92,8 @@ int CProgramContext::LoadTexture(const std::string texturePath)
 {
 	SwitchGlTextureSlot(m_currentTextureSlot);
 	m_textures.push_back(m_loader.Load(texturePath));
-	m_textures.at(m_currentTextureSlot)->Bind();
+
+	m_textures.at(m_currentTextureSlot - 1)->Bind();
 	return m_currentTextureSlot++;
 }
 

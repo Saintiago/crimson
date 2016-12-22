@@ -152,6 +152,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BulletSystem.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemySystem.h" />
     <ClInclude Include="Renderer3D.h" />
@@ -167,6 +169,8 @@
     <ClInclude Include="WindowClient.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="BulletSystem.cpp" />
     <ClCompile Include="Crimsonfalls.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySystem.cpp" />

@@ -28,14 +28,14 @@ void DispatchEvent(const SDL_Event &event, IWindowClient &acceptor)
         acceptor.OnKeyUp(event.key);
         break;
     case SDL_MOUSEBUTTONDOWN:
-        acceptor.OnDragBegin(GetMousePosition(event.button));
-        break;
-    case SDL_MOUSEBUTTONUP:
-        acceptor.OnDragEnd(GetMousePosition(event.button));
+        acceptor.OnMouseDown(event.button);
         break;
     case SDL_MOUSEMOTION:
         acceptor.OnMouseMotion(GetMousePosition(event.motion));
         break;
+	case SDL_MOUSEBUTTONUP:
+		acceptor.OnMouseUp(event.button);
+		break;
     }
 }
 

@@ -7,6 +7,9 @@
 #include "libchapter3.h"
 
 class IRenderer3D;
+class CMeshP3NT2;
+
+typedef std::shared_ptr<CMeshP3NT2> CMeshP3NT2Ptr;
 
 // Вершина с трёхмерной позицией, нормалью и 2D координатами текстуры.
 struct SVertexP3NT2
@@ -37,18 +40,15 @@ enum class MeshType
 class CMeshP3NT2 : private boost::noncopyable
 {
 public:
-    CMeshP3NT2(MeshType meshType);
+    CMeshP3NT2(MeshType meshType = MeshType::TriangleStrip);
 
     // Копирует данные в буфер в видеопамяти.
-    void Copy(const SMeshDataP3NT2 &data);
-
-    // Рисует сетку примитивов, используя массивы индексов и вершин.
-    void Draw(IRenderer3D &renderer)const;
+	MeshType GetMeshType();
+	size_t GetIndiciesCount();
+	size_t GetVerticiesCount();
 
 private:
     MeshType m_meshType;
-    CBufferObject m_attributesBuffer;
-    CBufferObject m_indexesBuffer;
-    size_t m_verticiesCount = 0;
-    size_t m_indiciesCount = 0;
+	size_t m_verticiesCount = 0;
+	size_t m_indiciesCount = 0;
 };

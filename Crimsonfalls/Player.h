@@ -3,25 +3,29 @@
 #include "Ray.h"
 #include "Unit.h"
 
+class CPlayer;
+
+typedef std::shared_ptr<CPlayer> PlayerPtr;
+
 class CPlayer : public CUnit
 {
 public:
-	CPlayer(int textureSlot, float radius);
+	CPlayer(float radius);
 	~CPlayer();
 
 	void SetArenaSize(glm::vec2 size);
 	void Update(float dt) override;
-	glm::mat4 GetModel() override;
-	SMeshDataP3NT2 GetTesselator() override;
-
+	
 	bool OnKeyDown(const SDL_KeyboardEvent &event);
 	bool OnKeyUp(const SDL_KeyboardEvent &event);
-	bool OnMouseMotion(const CRay &ray);
+	void OnMouseMotion(glm::vec2 hitPoint);
+	glm::vec2 GetTurretDirection();
 
 private:
 
 	void SetTurretAngle();
 	void SetPosition(float dt);
+	glm::mat4 GetModel();
 
 	std::set<unsigned> m_keysPressed;
 	glm::vec2 m_mousePos = { 0, 0 };

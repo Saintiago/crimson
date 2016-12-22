@@ -18,6 +18,8 @@ public:
     virtual void OnDragEnd(const glm::vec2 &pos) { (void)pos; }
     virtual void OnKeyDown(const SDL_KeyboardEvent &) {}
     virtual void OnKeyUp(const SDL_KeyboardEvent &) {}
+	virtual void OnMouseDown(const SDL_MouseButtonEvent &) {}
+	virtual void OnMouseUp(const SDL_MouseButtonEvent &) {}
 };
 
 class CWindow;

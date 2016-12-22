@@ -1,29 +1,30 @@
 #include "stdafx.h"
-#include "Enemy.h"
+#include "Bullet.h"
 #include "Renderer3D.h"
 
 namespace
 {
-	const float LINEAR_MOVE_SPEED = 0.5f;
+	const float LINEAR_MOVE_SPEED = 7.5f;
 }
 
-CEnemy::CEnemy(float radius, glm::vec2 pos)
+CBullet::CBullet(float radius, glm::vec2 pos, glm::vec2 direction)
 	: CUnit(radius, pos)
+	, m_direction(direction)
 {
 }
 
 
-CEnemy::~CEnemy()
+CBullet::~CBullet()
 {
 }
 
-void CEnemy::Update(float dt)
+void CBullet::Update(float dt)
 {
 	SetPosition(dt);
 	m_renderData.at(0)->model = GetModel();
 }
 
-void CEnemy::SetPosition(float dt)
+void CBullet::SetPosition(float dt)
 {
 	if (glm::length(m_direction) > 0)
 	{
@@ -31,12 +32,7 @@ void CEnemy::SetPosition(float dt)
 	}
 }
 
-void CEnemy::UpdateDirection(glm::vec2 playerPos)
-{
-	m_direction = playerPos - m_pos;
-}
-
-glm::mat4 CEnemy::GetModel()
+glm::mat4 CBullet::GetModel()
 {
 	const glm::vec3 eye = { 0, 0, 0 };
 	const glm::vec3 center = { m_direction.x, 0, m_direction.y };
@@ -45,14 +41,15 @@ glm::mat4 CEnemy::GetModel()
 	glm::mat4 transform = glm::translate(glm::mat4(), { m_pos.x, 0.f, m_pos.y });
 	glm::mat4 directionMatrix = glm::lookAt(eye, center, up);
 	return transform * directionMatrix;
+
 }
 
-bool CEnemy::GetAlive()
+bool CBullet::GetAlive()
 {
 	return m_alive;
 }
 
-void CEnemy::SetAlive(bool alive)
+void CBullet::SetAlive(bool alive)
 {
 	m_alive = alive;
 }

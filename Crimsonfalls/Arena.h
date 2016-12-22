@@ -7,19 +7,15 @@
 #include <glm/vec3.hpp>
 #include "Unit.h"
 
-const float ARENA_SIZE = 8.0f;
-
 class CArena : public CUnit
 {
 public:
 
 	glm::vec2 GetEntryPoint();
-	CArena(int textureSlot);
-	void Update(float dt) override;
-	glm::mat4 GetModel() override;
-	SMeshDataP3NT2 GetTesselator() override;
 	glm::vec2 GetSize();
+	CArena(float size);
+	void Update(float dt);
 
 private:
-	glm::vec2 m_size = { ARENA_SIZE, ARENA_SIZE };
+	glm::vec2 m_size;
 };

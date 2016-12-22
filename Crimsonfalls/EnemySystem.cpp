@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "EnemySystem.h"
 
-CEnemySystem::CEnemySystem(int textureSlot)
-	: m_textureSlot(textureSlot)
+CEnemySystem::CEnemySystem()
 {
 }
 
@@ -13,18 +12,32 @@ CEnemySystem::~CEnemySystem()
 
 void CEnemySystem::SpawnEnemy(const glm::vec2 pos = { 0,0 })
 {
-	EnemyPtr enemy = std::make_shared<CEnemy>(m_textureSlot, 0.2f, pos);
+	EnemyPtr enemy = std::make_shared<CEnemy>(0.2f, pos);
+
+	RenderDataPtr enemyRender = std::make_shared<RenderData>(
+		m_renderData.at(0)->mesh, 
+		m_renderData.at(0)->model, 
+		m_renderData.at(0)->textureSlot
+	);
+
+	enemy->SetRenderData({enemyRender});
 	m_enemies.push_back(enemy);
 }
 
-void CEnemySystem::Populate(int particlesCount)
+void CEnemySystem::RemoveDead()
 {
-	for (int i = 0; i < particlesCount; i++)
+	for (unsigned i = 0; i < m_enemies.size(); ++i)
 	{
-		float coordX = (float)(rand() % 100) / 50;
-		float coordY = (float)(rand() % 100) / 50;
-		SpawnEnemy({ coordX, coordY });
+		if (!m_enemies.at(i)->GetAlive())
+		{
+			m_enemies.erase(m_enemies.begin() + i);
+		}
 	}
+}
+
+void CEnemySystem::SetRenderData(RenderDataVector renderData)
+{
+	m_renderData = renderData;
 }
 
 void CEnemySystem::SetPlayerPos(glm::vec2 playerPos)
@@ -34,6 +47,8 @@ void CEnemySystem::SetPlayerPos(glm::vec2 playerPos)
 
 void CEnemySystem::Update(float dt)
 {
+	RemoveDead();
+
 	for (auto & enemy : m_enemies)
 	{
 		enemy->UpdateDirection(m_playerPos);
@@ -41,12 +56,15 @@ void CEnemySystem::Update(float dt)
 	}
 }
 
-void CEnemySystem::Draw(IRenderer3D &renderer)const
+RenderDataVector CEnemySystem::GetSceneObjects()const
 {
+	RenderDataVector sceneObjects;
 	for (auto & enemy : m_enemies)
 	{
-		enemy->Draw(renderer);
+		RenderDataVector enemyRenderData = enemy->GetRenderData();
+		sceneObjects.insert(sceneObjects.end(), enemyRenderData.begin(), enemyRenderData.end());
 	}
+	return sceneObjects;
 }
 
 std::vector<EnemyPtr> CEnemySystem::GetEnemies()

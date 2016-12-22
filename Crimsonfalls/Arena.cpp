@@ -2,109 +2,18 @@
 #include "Arena.h"
 #include <algorithm>
 
-namespace
-{
-	const float TILE_SIZE = 1.f;
-
-	glm::vec3 GetNormal(const float x, const float y)
-	{
-		glm::vec3 v1 = { x, y, 0 };
-		glm::vec3 v2 = { x + 0.1f, y, 0 };
-		glm::vec3 v3 = { x, y + 0.1f, 0 };
-		return glm::normalize(glm::cross(v2 - v1, v3 - v1));
-	}
-
-struct CArenaTesselator : SMeshDataP3NT2
-{
-public:
-    static const unsigned MIN_PRECISION = 4;
-
-    void Tesselate(float xSize, float ySize)
-    {
-        MakeVertexAttributes(xSize, ySize);
-        MakeTriangleStripIndicies(xSize, ySize);
-    }
-
-private:
-    void MakeVertexAttributes(float xSize, float ySize)
-    {
-        // вычисляем позиции вершин.
-		for (float ci = -(xSize / 2); ci <= (xSize / 2); ++ci)
-		{
-			const float x = TILE_SIZE * float(ci);
-			for (float ri = -(ySize / 2); ri <= (ySize / 2); ++ri)
-			{
-				const float y = TILE_SIZE * float(ri);
-
-				SVertexP3NT2 vertex;
-				vertex.position = { x, 0, y };
-
-				// Нормаль к сфере - это нормализованный вектор радиуса к данной точке
-				// Поскольку координаты центра равны 0, координаты вектора радиуса
-				// будут равны координатам вершины.
-				// Благодаря радиусу, равному 1, нормализация не требуется.
-				vertex.normal = GetNormal(x, y);
-
-				// Обе текстурные координаты должны плавно изменяться от 0 до 1,
-				// натягивая прямоугольную картинку на тело вращения.
-				// При UV-параметризации текстурными координатами будут u и v.
-				vertex.texCoord = { x / 4, y / 4 };
-
-				vertices.push_back(vertex);
-			}
-		}
-    }
-
-    void MakeTriangleStripIndicies(float xSize, float ySize)
-    {
-        indicies.clear();
-        indicies.reserve(xSize * ySize * 2);
-        // вычисляем индексы вершин.
-        for (unsigned ci = 0; ci <= xSize; ++ci)
-        {
-            if (ci % 2 == 0)
-            {
-                for (unsigned ri = 0; ri <= ySize; ++ri)
-                {
-                    unsigned index = ci * ySize + ri;
-                    indicies.push_back(index + ySize);
-                    indicies.push_back(index);
-                }
-            }
-            else
-            {
-                for (unsigned ri = ySize; ri <= ySize; --ri)
-                {
-                    unsigned index = ci * ySize + ri;
-                    indicies.push_back(index);
-                    indicies.push_back(index + ySize);
-                }
-            }
-        }
-    }
-};
-}
-
-CArena::CArena(int textureSlot)
-	: CUnit(GetTesselator(), textureSlot)
+CArena::CArena(float size)
+	: m_size(size)
 {
 }
 
 void CArena::Update(float dt)
 {
-
 }
 
-SMeshDataP3NT2 CArena::GetTesselator()
+glm::vec2 CArena::GetSize()
 {
-	CArenaTesselator tesselator;
-	tesselator.Tesselate(ARENA_SIZE, ARENA_SIZE);
-	return tesselator;
-}
-
-glm::mat4 CArena::GetModel()
-{
-	return glm::mat4(1);
+	return m_size;
 }
 
 glm::vec2 CArena::GetEntryPoint()
@@ -131,9 +40,4 @@ glm::vec2 CArena::GetEntryPoint()
 	{
 		return{ xCoordRand, yCoordMax };
 	}
-}
-
-glm::vec2 CArena::GetSize()
-{
-	return m_size;
 }
