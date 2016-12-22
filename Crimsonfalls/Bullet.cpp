@@ -38,7 +38,7 @@ glm::mat4 CBullet::GetModel()
 	const glm::vec3 center = { m_direction.x, 0, m_direction.y };
 	const glm::vec3 up = { 0, -1, 0 };
 
-	glm::mat4 transform = glm::translate(glm::mat4(), { m_pos.x, 0.f, m_pos.y });
+	glm::mat4 transform = glm::translate(glm::mat4(), { m_pos.x, 0.5f, m_pos.y });
 	glm::mat4 directionMatrix = glm::lookAt(eye, center, up);
 	return transform * directionMatrix;
 

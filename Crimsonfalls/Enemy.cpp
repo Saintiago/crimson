@@ -4,7 +4,7 @@
 
 namespace
 {
-	const float LINEAR_MOVE_SPEED = 0.5f;
+	const float LINEAR_MOVE_SPEED = 0.8f;
 }
 
 CEnemy::CEnemy(float radius, glm::vec2 pos)

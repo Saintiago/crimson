@@ -60,7 +60,7 @@ bool CheckIfTwoUnitsCollided(UnitPtr u1, UnitPtr u2)
 	return glm::length(u1->GetPosition() - u2->GetPosition()) <= collisionDistance;
 }
 
-std::vector<SVertexP3NT2> MakeStubVertexAttributes()
+std::vector<SVertexP3NT2> MakeStubVertexAttributes(float coef)
 {
 	std::vector<SVertexP3NT2> vertices;
 
@@ -75,10 +75,10 @@ std::vector<SVertexP3NT2> MakeStubVertexAttributes()
 	glm::vec3 v4 = { 0, -3.0f, 1.0f };
 	glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v1));
 
-	vertex1.position = v1 * 0.2f;
-	vertex2.position = v2 * 0.2f;
-	vertex3.position = v3 * 0.2f;
-	vertex4.position = v4 * 0.2f;
+	vertex1.position = v1 * coef;
+	vertex2.position = v2 * coef;
+	vertex3.position = v3 * coef;
+	vertex4.position = v4 * coef;
 
 	vertex1.normal = normal;
 	vertex2.normal = normal;
@@ -197,20 +197,24 @@ CWindowClient::CWindowClient(CWindow &window)
     , m_sunlight(GL_LIGHT0)
 {
 
-	SMeshDataP3NT2 stubMesh = { MakeStubVertexAttributes(), MakeStubTriangleStripIndicies() };
+	SMeshDataP3NT2 enemyMesh = { MakeStubVertexAttributes(0.2f), MakeStubTriangleStripIndicies() };
+	SMeshDataP3NT2 bulletMesh = { MakeStubVertexAttributes(0.08f), MakeStubTriangleStripIndicies() };
 	SMeshDataP3NT2 arenaMesh = { MakeArenaVertexAttributes(), MakeArenaTriangleStripIndicies() };
+	SMeshDataP3NT2 tankBaseMesh = { MakeStubVertexAttributes(0.3f), MakeStubTriangleStripIndicies() };
+	SMeshDataP3NT2 tankTurretMesh = { MakeStubVertexAttributes(0.2f), MakeStubTriangleStripIndicies() };
 
-	m_player = std::make_shared<CPlayer>(0.2f);
+	m_player = std::make_shared<CPlayer>(0.3f);
 	m_player->SetArenaSize({ ARENA_SIZE, ARENA_SIZE });
 	m_bullets.SetArenaSize({ ARENA_SIZE, ARENA_SIZE });
 
 	RenderDataPtr arenaRender = std::make_shared<RenderData>(arenaMesh, glm::mat4(1), m_programContext.LoadTexture("res/img/dirt.jpg"));
 	m_arena.SetRenderData({ arenaRender });
-	RenderDataPtr enemyRender = std::make_shared<RenderData>(stubMesh, glm::mat4(), m_programContext.LoadTexture("res/img/flesh.jpg"));
+	RenderDataPtr enemyRender = std::make_shared<RenderData>(enemyMesh, glm::mat4(), m_programContext.LoadTexture("res/img/flesh.jpg"));
 	m_enemies.SetRenderData({ enemyRender });
-	RenderDataPtr playerRender = std::make_shared<RenderData>(stubMesh, glm::mat4(), m_programContext.LoadTexture("res/img/steel.jpg"));
-	m_player->SetRenderData({ playerRender });
-	RenderDataPtr bulletRender = std::make_shared<RenderData>(stubMesh, glm::mat4(), m_programContext.LoadTexture("res/img/brass.jpg"));
+	RenderDataPtr tankBaseRender = std::make_shared<RenderData>(tankBaseMesh, glm::mat4(), m_programContext.LoadTexture("res/img/steel.jpg"));
+	RenderDataPtr tankTurretRender = std::make_shared<RenderData>(tankTurretMesh, glm::mat4(), m_programContext.LoadTexture("res/img/steel.jpg"));
+	m_player->SetRenderData({ tankBaseRender,  tankTurretRender });
+	RenderDataPtr bulletRender = std::make_shared<RenderData>(bulletMesh, glm::mat4(), m_programContext.LoadTexture("res/img/brass.jpg"));
 	m_bullets.SetRenderData({ bulletRender });
 
     const glm::vec3 SUNLIGHT_DIRECTION = {-1.f, 0.2f, 0.7f};
@@ -250,10 +254,10 @@ void CWindowClient::OnUpdateWindow(float deltaSeconds)
 	{
 		m_enemies.SpawnEnemy(m_arena.GetEntryPoint());
 		m_difficulty++;
-		m_timeToSpawnEnemy = glm::clamp(ENEMY_SPAWN_TIME - ((float)m_difficulty / 10), .0f, ENEMY_SPAWN_TIME);
+		m_timeToSpawnEnemy = glm::clamp(ENEMY_SPAWN_TIME - ((float)m_difficulty / 10), .2f, ENEMY_SPAWN_TIME);
 	}
 
-	std::cerr << m_enemies.GetEnemies().size() << std::endl;
+	std::cerr << m_difficulty << std::endl;
 }
 
 bool CWindowClient::CheckBulletsEnemiesCollisions()

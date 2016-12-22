@@ -3,7 +3,7 @@
 
 namespace
 {
-	const float RELOAD_TIME = 0.5f;
+	const float RELOAD_TIME = 0.2f;
 }
 
 CBulletSystem::CBulletSystem()
@@ -28,7 +28,15 @@ void CBulletSystem::ReleaseTrigger()
 void CBulletSystem::SpawnBullet()
 {
 	BulletPtr bullet = std::make_shared<CBullet>(0.04f, m_playerPos, m_turretDirection);
-	bullet->SetRenderData(m_renderData);
+
+	RenderDataPtr bulletRender = std::make_shared<RenderData>(
+		m_renderData.at(0)->mesh,
+		m_renderData.at(0)->model,
+		m_renderData.at(0)->textureSlot
+		);
+
+	bullet->SetRenderData({ bulletRender });
+
 	m_bullets.push_back(bullet);
 }
 

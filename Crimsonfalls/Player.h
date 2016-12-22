@@ -25,11 +25,14 @@ private:
 
 	void SetTurretAngle();
 	void SetPosition(float dt);
-	glm::mat4 GetModel();
+	glm::mat4 GetBaseModel();
+	glm::mat4 GetTurretModel();
 
 	std::set<unsigned> m_keysPressed;
 	glm::vec2 m_mousePos = { 0, 0 };
 	glm::vec2 m_turretDirection = { 0, 1 };
+	glm::vec2 m_baseDirection = { 0, 1 };
+	float m_speed = 0;
 	glm::vec2 m_arenaSize = { 10, 10 };
 };
 
